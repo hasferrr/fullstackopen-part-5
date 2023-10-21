@@ -54,7 +54,17 @@ const App = () => {
 
   const createNewBlog = async (newBlog) => {
     const result = await blogService.create(newBlog)
-    setBlogs([...blogs, result])
+    setBlogs([
+      ...blogs,
+      {
+        ...result,
+        user: {
+          id: result.user,
+          name: user.name,
+          username: user.username
+        }
+      }
+    ])
     showShortNotification(`a new Blog ${result.title} by ${result.author}`, 'green')
   }
 

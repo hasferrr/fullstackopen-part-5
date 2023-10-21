@@ -7,7 +7,7 @@ const Blog = ({ blog }) => {
   return (
     <div className='blog'>
       <div>
-        {blog.title}
+        {blog.title} by {blog.author}
         <button onClick={() => setVisible(!visible)}>
           {visible ? 'hide' : 'show'}
         </button>
@@ -18,7 +18,7 @@ const Blog = ({ blog }) => {
           likes {blog.likes}
           <button>like</button>
         </div>
-        <div>by {blog.author}</div>
+        <div>added by {blog.user.name}</div>
       </div>
     </div>
   )
