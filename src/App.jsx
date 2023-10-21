@@ -4,17 +4,14 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
   const [notification, setNotification] = useState(null)
-  const [createNewVisible, setCreateNewVisible] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -55,43 +52,15 @@ const App = () => {
     setNotification(null)
   }
 
-  const createNewBlog = async (event) => {
-    event.preventDefault()
-    const result = await blogService.create({ title, author, url })
+  const createNewBlog = async (newBlog) => {
+    const result = await blogService.create(newBlog)
     setBlogs([...blogs, result])
-    setTitle('')
-    setAuthor('')
-    setUrl('')
     showShortNotification(`a new Blog ${result.title} by ${result.author}`, 'green')
   }
 
   const showShortNotification = (text, color) => {
     setNotification({ text, color })
     setTimeout(() => setNotification(null), 5000)
-  }
-
-  const blogForm = () => {
-    const hideWhenVisible = { display: createNewVisible ? 'none' : '' }
-    const showWhenVisible = { display: createNewVisible ? '' : 'none' }
-    return (
-      <div>
-        <div style={hideWhenVisible}>
-          <button onClick={() => setCreateNewVisible(true)}>new blog</button>
-        </div>
-        <div style={showWhenVisible}>
-          <BlogForm
-            createNewBlog={createNewBlog}
-            title={title}
-            author={author}
-            url={url}
-            setTitle={setTitle}
-            setAuthor={setAuthor}
-            setUrl={setUrl}
-          />
-          <button onClick={() => setCreateNewVisible(false)}>cancel</button>
-        </div>
-      </div>
-    )
   }
 
   if (user === null) {
@@ -133,7 +102,9 @@ const App = () => {
         <button onClick={handleLogout}>logout</button>
       </p>
 
-      {blogForm()}
+      <Togglable label='new blog'>
+        <BlogForm createNewBlog={createNewBlog} />
+      </Togglable>
       <br />
 
       {blogs.map(blog =>
