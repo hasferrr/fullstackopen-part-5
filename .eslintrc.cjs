@@ -19,5 +19,6 @@ module.exports = {
     'react/prop-types': 0,
     'quotes': ['error', 'single'],
     'semi': ['error', 'never'],
+    'comma-dangle': ['error', 'only-multiline'],
   },
 }
