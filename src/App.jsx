@@ -89,6 +89,11 @@ const App = () => {
     ))
   }
 
+  const deleteBlog = async (id) => {
+    await blogService.deleteById(id)
+    setBlogs([...blogs].filter((blog) => blog.id !== id))
+  }
+
   const showShortNotification = (text, color) => {
     setNotification({ text, color })
     setTimeout(() => setNotification(null), 5000)
@@ -143,6 +148,7 @@ const App = () => {
           key={blog.id}
           blog={blog}
           updateBlog={updateBlog}
+          deleteBlog={deleteBlog}
         />
       )}
     </div>
