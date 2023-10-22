@@ -1,8 +1,18 @@
 import { useState } from 'react'
 import './Blog.css'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, updateBlog }) => {
   const [visible, setVisible] = useState(false)
+
+  const incrementLike = () => {
+    updateBlog(blog.id, {
+      user: blog.user.id,
+      likes: blog.likes + 1,
+      author: blog.author,
+      title: blog.title,
+      url: blog.url,
+    })
+  }
 
   return (
     <div className='blog'>
@@ -16,7 +26,7 @@ const Blog = ({ blog }) => {
         <a href={blog.url}>{blog.url}</a>
         <div>
           likes {blog.likes}
-          <button>like</button>
+          <button onClick={incrementLike}>like</button>
         </div>
         <div>added by {blog.user.name}</div>
       </div>

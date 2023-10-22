@@ -68,6 +68,22 @@ const App = () => {
     showShortNotification(`a new Blog ${result.title} by ${result.author}`, 'green')
   }
 
+  const updateBlog = async (id, updatedBlog) => {
+    const result = await blogService.update(id, updatedBlog)
+    setBlogs([...blogs].map((blog) =>
+      blog.id === result.id
+        ? {
+          ...result,
+          user: {
+            id: result.user,
+            name: user.name,
+            username: user.username
+          }
+        }
+        : blog
+    ))
+  }
+
   const showShortNotification = (text, color) => {
     setNotification({ text, color })
     setTimeout(() => setNotification(null), 5000)
@@ -118,7 +134,11 @@ const App = () => {
       <br />
 
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          updateBlog={updateBlog}
+        />
       )}
     </div>
   )
