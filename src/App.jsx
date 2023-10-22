@@ -7,7 +7,7 @@ import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const [blogs, setBlogsUnsorted] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -27,6 +27,11 @@ const App = () => {
       blogService.setToken(loggedUser.token)
     }
   }, [])
+
+  const setBlogs = (value) => {
+    value.sort((a, b) => b.likes - a.likes)
+    setBlogsUnsorted(value)
+  }
 
   const handleLogin = async (event) => {
     event.preventDefault()
