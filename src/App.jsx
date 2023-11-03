@@ -29,8 +29,9 @@ const App = () => {
   }, [])
 
   const setBlogs = (value) => {
-    value.sort((a, b) => b.likes - a.likes)
-    setBlogsUnsorted(value)
+    const sorted = [...value]
+    sorted.sort((a, b) => b.likes - a.likes)
+    setBlogsUnsorted(sorted)
   }
 
   const handleLogin = async (event) => {
