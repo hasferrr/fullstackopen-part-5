@@ -47,4 +47,15 @@ describe('<Togglable />', () => {
     expect(anchorUrl).toBeDefined()
     expect(likeElement).toBeDefined()
   })
+
+  test('like button test', async () => {
+    const likeElement = screen.getByText(`likes ${blog.likes}`)
+    const likeButton = likeElement.querySelector('button')
+
+    const user = userEvent.setup()
+    await user.click(likeButton)
+    await user.click(likeButton)
+
+    expect(mockHandler.mock.calls).toHaveLength(2)
+  })
 })
