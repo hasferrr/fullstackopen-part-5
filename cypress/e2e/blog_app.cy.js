@@ -36,4 +36,23 @@ describe('Blog app', function () {
         .and('have.css', 'color', 'rgb(255, 0, 0)')
     })
   })
+
+  describe('When logged in', function () {
+    beforeEach(function () {
+      cy.get('#username').type('hasferrr')
+      cy.get('#password').type('12345678')
+      cy.get('#login-button').click()
+    })
+
+    it('A blog can be created', function () {
+      cy.contains('new blog').click()
+      cy.get('#title').type('How to Code')
+      cy.get('#author').type('Famous Person')
+      cy.get('#url').type('example.com')
+      cy.get('#add-note-button').click()
+      cy.get('.notification')
+        .should('contain', 'a new Blog How to Code by Famous Person')
+        .and('have.css', 'color', 'rgb(0, 128, 0)')
+    })
+  })
 })
