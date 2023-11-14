@@ -39,9 +39,11 @@ describe('Blog app', function () {
 
   describe('When logged in', function () {
     beforeEach(function () {
-      cy.get('#username').type('hasferrr')
-      cy.get('#password').type('12345678')
-      cy.get('#login-button').click()
+      cy.login({
+        username: 'hasferrr',
+        password: '12345678',
+      })
+      cy.createBlog({ title: 'Blog1', author: 'Author1', url: 'url1.com' })
     })
 
     it('A blog can be created', function () {
@@ -53,6 +55,20 @@ describe('Blog app', function () {
       cy.get('.notification')
         .should('contain', 'a new Blog How to Code by Famous Person')
         .and('have.css', 'color', 'rgb(0, 128, 0)')
+    })
+
+    it('Users can like a blog', function () {
+      cy.contains('Blog1 by Author1')
+        .parent()
+        .contains('show')
+        .click()
+
+      cy.contains('likes 0')
+        .parent()
+        .contains('like')
+        .click()
+
+      cy.contains('likes 1')
     })
   })
 })
