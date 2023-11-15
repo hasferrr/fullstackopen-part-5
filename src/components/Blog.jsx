@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import { useState } from 'react'
 import './Blog.css'
 
-const Blog = ({ blog, updateBlog, deleteBlog }) => {
+const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
   const [visible, setVisible] = useState(false)
 
   const incrementLike = () => {
@@ -36,7 +36,9 @@ const Blog = ({ blog, updateBlog, deleteBlog }) => {
           <button onClick={incrementLike}>like</button>
         </div>
         <div>added by {blog.user.name}</div>
-        <button onClick={handleDelete}>remove</button>
+        {user.username === blog.user.username
+          ? <button onClick={handleDelete}>remove</button>
+          : <></>}
       </div>
     </div>
   )

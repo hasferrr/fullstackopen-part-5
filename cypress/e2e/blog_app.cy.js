@@ -1,12 +1,16 @@
 describe('Blog app', function () {
   beforeEach(function () {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
-    const user = {
+    cy.request('POST', 'http://localhost:3003/api/users', {
       username: 'hasferrr',
       password: '12345678',
       name: 'Hasfer',
-    }
-    cy.request('POST', 'http://localhost:3003/api/users', user)
+    })
+    cy.request('POST', 'http://localhost:3003/api/users', {
+      username: 'xyz',
+      password: 'qwertyuiop',
+      name: 'Xyz',
+    })
     cy.visit('http://localhost:5173')
   })
 
@@ -90,6 +94,35 @@ describe('Blog app', function () {
         .click()
 
       cy.should('not.contain', 'Blog2 by Author2')
+    })
+  })
+
+  describe('When logged in and another User have a blog', function () {
+    beforeEach(function () {
+      cy.login({
+        username: 'xyz',
+        password: 'qwertyuiop',
+      })
+      cy.createBlog({ title: 'XYZs Blog', author: 'Author0', url: 'url0.com' })
+      cy.contains('logout').click()
+      cy.login({
+        username: 'hasferrr',
+        password: '12345678',
+      })
+      cy.createBlog({ title: 'Blog1', author: 'Author1', url: 'url1.com' })
+      cy.createBlog({ title: 'Blog2', author: 'Author2', url: 'url2.com' })
+    })
+
+    it('Users cannot see another user remove button', function () {
+      cy.contains('XYZs Blog')
+        .parent()
+        .as('XYZs-Blog')
+
+      cy.get('@XYZs-Blog')
+        .contains('show')
+        .click()
+
+      cy.should('not.contain', 'remove')
     })
   })
 })
