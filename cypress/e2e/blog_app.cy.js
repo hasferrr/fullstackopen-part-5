@@ -44,6 +44,7 @@ describe('Blog app', function () {
         password: '12345678',
       })
       cy.createBlog({ title: 'Blog1', author: 'Author1', url: 'url1.com' })
+      cy.createBlog({ title: 'Blog2', author: 'Author2', url: 'url2.com' })
     })
 
     it('A blog can be created', function () {
@@ -60,15 +61,35 @@ describe('Blog app', function () {
     it('Users can like a blog', function () {
       cy.contains('Blog1 by Author1')
         .parent()
+        .as('Blog1')
+
+      cy.get('@Blog1')
         .contains('show')
         .click()
 
       cy.contains('likes 0')
-        .parent()
+
+      cy.get('@Blog1')
         .contains('like')
         .click()
 
       cy.contains('likes 1')
+    })
+
+    it('Users can delete a blog', function () {
+      cy.contains('Blog2 by Author2')
+        .parent()
+        .as('Blog2')
+
+      cy.get('@Blog2')
+        .contains('show')
+        .click()
+
+      cy.get('@Blog2')
+        .contains('remove')
+        .click()
+
+      cy.should('not.contain', 'Blog2 by Author2')
     })
   })
 })
