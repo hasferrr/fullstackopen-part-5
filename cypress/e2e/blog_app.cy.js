@@ -124,5 +124,57 @@ describe('Blog app', function () {
 
       cy.should('not.contain', 'remove')
     })
+
+    it('Blogs are ordered according to likes', function () {
+      cy.get('.blog')
+        .eq(0)
+        .should('contain', 'XYZs Blog by Author0')
+        .contains('show').click()
+      cy.get('.blog')
+        .eq(1)
+        .should('contain', 'Blog1 by Author1')
+        .contains('show').click()
+      cy.get('.blog')
+        .eq(2)
+        .should('contain', 'Blog2 by Author2')
+        .contains('show').click()
+
+      for (let i = 0; i < 3; i++) {
+        cy.contains('Blog1 by Author1')
+          .parent()
+          .contains('like')
+          .click()
+        cy.wait(500)
+      }
+
+      for (let i = 0; i < 1; i++) {
+        cy.contains('XYZs Blog by Author0')
+          .parent()
+          .contains('like')
+          .click()
+        cy.wait(500)
+      }
+
+      for (let i = 0; i < 4; i++) {
+        cy.contains('Blog2 by Author2')
+          .parent()
+          .contains('like')
+          .click()
+        cy.wait(500)
+      }
+
+      cy.get('.blog')
+        .eq(0)
+        .should('contain', 'Blog2 by Author2')
+        .and('contain', 'likes 4')
+      cy.get('.blog')
+        .eq(1)
+        .should('contain', 'Blog1 by Author1')
+        .and('contain', 'likes 3')
+      cy.get('.blog')
+        .eq(2)
+        .should('contain', 'XYZs Blog by Author0')
+        .and('contain', 'likes 1')
+    })
   })
 })
